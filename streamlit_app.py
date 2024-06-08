@@ -39,6 +39,7 @@ def main():
         'worst concave points', 'worst symmetry', 'worst fractal dimension'
     ]
 
+    # Create a dictionary to hold input values
     input_values = {}
     all_fields_filled = True
     for feature in features:
