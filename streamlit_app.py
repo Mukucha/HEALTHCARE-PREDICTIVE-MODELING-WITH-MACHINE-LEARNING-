@@ -7,6 +7,7 @@ import os
 model_path = 'breast_cancer_detector.sav'
 if not os.path.exists(model_path):
     st.error(f"Model file not found: {model_path}")
+    st.stop()
 
 # Load the saved model
 try:
@@ -40,7 +41,7 @@ def main():
 
     input_values = {}
     for feature in features:
-        input_values[feature] = st.number_input(feature)
+        input_values[feature] = st.number_input(feature, value=0.0)
 
     if st.button("Predict"):
         data = pd.DataFrame([input_values])
