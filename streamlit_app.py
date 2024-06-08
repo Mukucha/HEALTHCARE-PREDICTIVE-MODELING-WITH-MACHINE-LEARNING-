@@ -55,10 +55,8 @@ def main():
 
             try:
                 prediction = predict(data)
-                diagnosis = "Malignant" if prediction[0] == 1 else "Benign"
-                st.write("Prediction:", diagnosis)
-                
-                if diagnosis == "Malignant":
+                if prediction[0] == 1:
+                    st.write("Prediction: Malignant")
                     st.warning("The prediction indicates a high likelihood of breast cancer. Please consult with a healthcare provider for further evaluation.")
                     st.write("### Risk Factors")
                     st.write("""
@@ -78,15 +76,7 @@ def main():
                         4. **Lifestyle Changes**: Adopt a healthy lifestyle to lower your risk.
                     """)
                 else:
-                    st.success("The prediction indicates a low likelihood of breast cancer. However, regular screenings and a healthy lifestyle are important.")
-                    st.write("### General Health Tips")
-                    st.write("""
-                        - Maintain a healthy diet rich in fruits, vegetables, and whole grains.
-                        - Engage in regular physical activity.
-                        - Avoid smoking and limit alcohol consumption.
-                        - Stay at a healthy weight.
-                        - Perform regular self-examinations and schedule routine screenings.
-                    """)
+                    st.error("Model prediction is not malignant. Please provide more information.")
             except ValueError as e:
                 st.error(f"Error in prediction: {e}")
             except Exception as e:
