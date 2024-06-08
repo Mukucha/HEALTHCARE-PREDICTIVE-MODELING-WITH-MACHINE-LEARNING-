@@ -40,11 +40,15 @@ def main():
     ]
 
     input_values = {}
+    all_fields_filled = True
     for feature in features:
-        input_values[feature] = st.number_input(feature, value=0.0)
+        value = st.number_input(feature, min_value=0.0, step=0.1)
+        if value == 0.0:
+            all_fields_filled = False
+        input_values[feature] = value
 
     if st.button("Predict"):
-        if any(value == 0.0 for value in input_values.values()):
+        if not all_fields_filled:
             st.error("Please fill in all fields before making a prediction.")
         else:
             data = pd.DataFrame([input_values])
