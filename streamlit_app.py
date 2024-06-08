@@ -7,7 +7,6 @@ import os
 model_path = 'breast_cancer_detector.sav'
 if not os.path.exists(model_path):
     st.error(f"Model file not found: {model_path}")
-    st.stop()
 
 # Load the saved model
 try:
@@ -40,47 +39,21 @@ def main():
     ]
 
     input_values = {}
-    all_fields_filled = True
     for feature in features:
-        value = st.number_input(feature, min_value=0.0, step=0.1)
-        if value == 0.0:
-            all_fields_filled = False
-        input_values[feature] = value
+        input_values[feature] = st.number_input(feature)
 
     if st.button("Predict"):
-        if not all_fields_filled:
-            st.error("Please fill in all fields before making a prediction.")
-        else:
-            data = pd.DataFrame([input_values])
+        data = pd.DataFrame([input_values])
 
-            try:
-                prediction = predict(data)
-                if prediction[0] == 1:
-                    st.write("Prediction: Malignant")
-                    st.warning("The prediction indicates a high likelihood of breast cancer. Please consult with a healthcare provider for further evaluation.")
-                    st.write("### Risk Factors")
-                    st.write("""
-                        - **Age**: The risk of breast cancer increases as you get older.
-                        - **Genetic mutations**: Inherited changes (mutations) to certain genes, such as BRCA1 and BRCA2.
-                        - **Reproductive history**: Early menstrual periods before age 12 and starting menopause after age 55.
-                        - **Dense breasts**: Women with dense breasts are more likely to get breast cancer.
-                        - **Family history**: A family history of breast cancer.
-                        - **Previous treatment with radiation therapy**: Especially treatments to the chest area.
-                        - **Lifestyle factors**: Such as alcohol consumption, obesity, and lack of physical activity.
-                    """)
-                    st.write("### Recommended Next Steps")
-                    st.write("""
-                        1. **Consult a Doctor**: Schedule an appointment with a healthcare provider for a detailed examination and diagnostic tests.
-                        2. **Further Testing**: Your doctor might recommend a biopsy, mammogram, or other imaging tests.
-                        3. **Genetic Counseling**: If you have a family history of breast cancer, consider genetic counseling to understand your risk better.
-                        4. **Lifestyle Changes**: Adopt a healthy lifestyle to lower your risk.
-                    """)
-                else:
-                    st.error("Model prediction is not malignant. Please provide more information.")
-            except ValueError as e:
-                st.error(f"Error in prediction: {e}")
-            except Exception as e:
-                st.error(f"Unexpected error: {e}")
+        try:
+            prediction = predict(data)
+            st.write("Prediction:", "Malignant" if prediction[0] == 1 else "Benign")
+        except ValueError as e:
+            st.error(f"Error in prediction: {e}")
+        except Exception as e:
+            st.error(f"Unexpected error: {e}")
 
 if __name__ == "__main__":
     main()
+
+
